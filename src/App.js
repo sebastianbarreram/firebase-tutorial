@@ -7,6 +7,7 @@ import {
   addDoc,
   updateDoc,
   doc,
+  deleteDoc,
 } from "firebase/firestore";
 
 function App() {
@@ -25,6 +26,12 @@ function App() {
     const userDoc = doc(db, "users", id);
     const newFields = { age: age + 1 };
     await updateDoc(userDoc, newFields);
+    window.location.reload();
+  };
+
+  const deleteUser = async (id) => {
+    const userDoc = doc(db, "users", id);
+    await deleteDoc(userDoc);
     window.location.reload();
   };
 
@@ -55,7 +62,7 @@ function App() {
       <button onClick={createUser}> Create User</button>
       {users.map((user) => {
         return (
-          <div key={user.id} style={{border: "ridge","paddingBottom":"10px"}}>
+          <div key={user.id} style={{ border: "ridge", paddingBottom: "10px" }}>
             <h1>Name: {user.name}</h1>
             <h1>Age: {user.age}</h1>
             <button
@@ -64,6 +71,13 @@ function App() {
               }}
             >
               Increase Age
+            </button>
+            <button
+              onClick={() => {
+                deleteUser(user.id);
+              }}
+            >
+              Delete User
             </button>
           </div>
         );
